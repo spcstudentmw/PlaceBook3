@@ -1,6 +1,6 @@
 package com.raywenderlich.placebook.ui
 
-import MapsViewModel
+
 import android.Manifest
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.Observer
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.location.*
 
@@ -16,10 +17,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.gms.maps.model.PointOfInterest
+import com.google.android.gms.maps.model.*
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.net.FetchPhotoRequest
@@ -27,6 +25,10 @@ import com.google.android.libraries.places.api.net.FetchPlaceRequest
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.raywenderlich.placebook.R
 import com.raywenderlich.placebook.adapter.BookmarkInfoWindowAdapter
+import com.raywenderlich.placebook.viewmodel.MapsViewModel
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -65,6 +67,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
         setupMapListeners()
+        createBookmarkMarkerObserver()
         getCurrentLocation()
 
         // Assign custom InfoWindowAdapter to map
@@ -81,9 +84,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         map.setOnPoiClickListener {
             displayPoi(it)
         }
-        map.setOnInfoWindowClickListener {
-            handleInfoWindowClick(it)
-        }
+        map.setOnInfoWindowClickListener { handleInfoWindowClick(it) }
     }
 
     // Create Places client- uses api key variable for Places API call
@@ -96,6 +97,38 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun setupLocationClient() {
         fusedLocationClient =
                 LocationServices.getFusedLocationProviderClient(this)
+    }
+
+    private fun addPlaceMarker(
+            bookmark: MapsViewModel.BookmarkMarkerView): Marker? {
+        val marker = map.addMarker(MarkerOptions()
+                .position(bookmark.location)
+                .icon(BitmapDescriptorFactory.defaultMarker(
+                        BitmapDescriptorFactory.HUE_AZURE))
+                .alpha(0.8f))
+        marker.tag = bookmark
+        return marker
+    }
+
+    private fun createBookmarkMarkerObserver() {
+        // 1
+        mapsViewModel.getBookmarkMarkerViews()?.observe(
+                this, Observer<List<MapsViewModel.BookmarkMarkerView>> {
+            // 2
+            map.clear()
+            // 3
+            it?.let {
+                displayAllBookmarks(it)
+            }
+        })
+    }
+
+    // To display bookmarks
+    private fun displayAllBookmarks(
+            bookmarks: List<MapsViewModel.BookmarkMarkerView>) {
+        for (bookmark in bookmarks) {
+            addPlaceMarker(bookmark)
+        }
     }
 
     // Method to get users current location
@@ -251,8 +284,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun handleInfoWindowClick(marker: Marker) {
     val placeInfo = (marker.tag as PlaceInfo)
     if (placeInfo.place != null) {
-        mapsViewModel.addBookmarkFromPlace(placeInfo.place,
-            placeInfo.image)
+        GlobalScope.launch {
+            GlobalScope.launch {
+                mapsViewModel.addBookmarkFromPlace(placeInfo.place,
+                        placeInfo.image)
+            }
+        }
     }
     marker.remove()
     }

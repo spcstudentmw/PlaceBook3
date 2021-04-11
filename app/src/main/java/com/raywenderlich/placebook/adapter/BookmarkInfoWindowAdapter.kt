@@ -36,8 +36,7 @@ class BookmarkInfoWindowAdapter(context: Activity) :
 
         // Set ImageView to display photo along with detail of POI
         val imageView = contents.findViewById<ImageView>(R.id.photo)
-        imageView.setImageBitmap((marker.tag as
-                MapsActivity.PlaceInfo).image)
+        imageView.setImageBitmap((marker.tag as MapsActivity.PlaceInfo).image)
 
         return contents
     }

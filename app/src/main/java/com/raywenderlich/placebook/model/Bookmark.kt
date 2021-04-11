@@ -1,3 +1,4 @@
+package com.raywenderlich.placebook.model
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 

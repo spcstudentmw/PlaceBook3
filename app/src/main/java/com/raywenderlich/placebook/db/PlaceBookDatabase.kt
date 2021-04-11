@@ -1,7 +1,10 @@
+package com.raywenderlich.placebook.db
+
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.raywenderlich.placebook.model.Bookmark
 
 // 1
 @Database(entities = arrayOf(Bookmark::class), version = 1)

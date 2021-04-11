@@ -1,5 +1,11 @@
+package com.raywenderlich.placebook.repository
+
+import com.raywenderlich.placebook.db.PlaceBookDatabase
+import com.raywenderlich.placebook.model.Bookmark
 import android.content.Context
 import androidx.lifecycle.LiveData
+import com.raywenderlich.placebook.db.BookmarkDao
+
 
 //  Pass context object to constructor for PlaceBookDatabase instance
 class BookmarkRepo(context: Context) {
