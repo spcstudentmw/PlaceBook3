@@ -308,7 +308,7 @@ class BookmarkDetailsActivity : AppCompatActivity(),
         fab.setOnClickListener { sharePlace() }
     }
 
-
+//
     companion object {
         private const val REQUEST_CAPTURE_IMAGE = 1
         private const val REQUEST_GALLERY_IMAGE = 2
