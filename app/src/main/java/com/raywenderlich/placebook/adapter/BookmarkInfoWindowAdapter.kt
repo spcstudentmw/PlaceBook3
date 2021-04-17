@@ -1,7 +1,6 @@
 package com.raywenderlich.placebook.adapter
 
 import android.app.Activity
-import android.graphics.Bitmap
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -9,10 +8,11 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.Marker
 import com.raywenderlich.placebook.R
 import com.raywenderlich.placebook.ui.MapsActivity
+import com.raywenderlich.placebook.viewmodel.MapsViewModel
 
 //  Class impements GoogleMap.InfoWindowAdapter interface - custom
 // InfoWindowAdapter class to load layout for image and text of POI
-class BookmarkInfoWindowAdapter(context: Activity) :
+class BookmarkInfoWindowAdapter(val context: Activity) :
     GoogleMap.InfoWindowAdapter {
     // 2
     private val contents: View
@@ -36,7 +36,21 @@ class BookmarkInfoWindowAdapter(context: Activity) :
 
         // Set ImageView to display photo along with detail of POI
         val imageView = contents.findViewById<ImageView>(R.id.photo)
-        imageView.setImageBitmap((marker.tag as MapsActivity.PlaceInfo).image)
+        when (marker.tag) {
+            // 1
+            is MapsActivity.PlaceInfo -> {
+                imageView.setImageBitmap(
+                    (marker.tag as MapsActivity.PlaceInfo).image)
+            }
+            // 2
+            is MapsViewModel.BookmarkView -> {
+                var bookMarkview = marker.tag as
+                        MapsViewModel.BookmarkView
+                // Set imageView bitmap here
+                imageView.setImageBitmap(bookMarkview.getImage(context))
+            }
+        }
+
 
         return contents
     }
