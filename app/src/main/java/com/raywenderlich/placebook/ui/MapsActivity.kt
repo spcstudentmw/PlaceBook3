@@ -41,7 +41,6 @@ import com.raywenderlich.placebook.R
 import com.raywenderlich.placebook.adapter.BookmarkInfoWindowAdapter
 import com.raywenderlich.placebook.adapter.BookmarkListAdapter
 import com.raywenderlich.placebook.viewmodel.MapsViewModel
-import kotlinx.android.synthetic.main.activity_bookmark_details.*
 import kotlinx.android.synthetic.main.activity_bookmark_details.toolbar
 import kotlinx.android.synthetic.main.activity_maps.*
 import kotlinx.android.synthetic.main.drawer_view_maps.*

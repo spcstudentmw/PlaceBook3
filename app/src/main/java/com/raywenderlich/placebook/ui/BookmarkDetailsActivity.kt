@@ -23,7 +23,6 @@ import com.raywenderlich.placebook.viewmodel.BookmarkDetailsViewModel
 import kotlinx.android.synthetic.main.activity_bookmark_details.*
 import java.io.File
 import java.net.URLEncoder
-import kotlinx.android.synthetic.main.main_view_maps.*
 
 class BookmarkDetailsActivity : AppCompatActivity(),
         PhotoOptionDialogFragment.PhotoOptionDialogListener {
