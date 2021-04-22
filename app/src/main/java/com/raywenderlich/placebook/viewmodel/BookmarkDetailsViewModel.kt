@@ -6,7 +6,7 @@ import android.graphics.Bitmap
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
-import com.raywenderlich.placebook.ImageUtils
+import com.raywenderlich.placebook.util.ImageUtils
 import com.raywenderlich.placebook.model.Bookmark
 import com.raywenderlich.placebook.repository.BookmarkRepo
 import kotlinx.coroutines.GlobalScope
